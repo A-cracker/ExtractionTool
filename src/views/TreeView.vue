@@ -5,7 +5,7 @@
         <div class="search-box">
           <span>搜索：</span>
           <input type="text" v-model="keyword" placeholder="请输入分析点" @keydown.enter="filter" />
-                    <el-button @click="getInitTreeData">刷新</el-button>
+          <span style="margin: 0 2px;display: inline-block"><el-button @click="filter" :icon="Search"></el-button></span>
         </div>
         <vue3-tree-org
             ref="tree"
@@ -35,7 +35,6 @@
           <template v-slot="{node}">
             <div class="tree-org-node__text node-label">
               <div>
-                <div class="custom-content">语义id:{{node.id}}</div>
                 {{handleLabel(node.label)}}
               </div>
 
@@ -48,66 +47,6 @@
         </vue3-tree-org>
       </div>
     </div>
-    <!--添加分析点对话框-->
-    <el-dialog v-model="dialogFormVisible" title="增加文档分析点" align-center>
-      <el-form :model="addNodeForm">
-        <el-form-item label="分析点名" label-width="80px">
-          <el-input v-model="addNodeForm.name" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="语义id" label-width="80px">
-          <el-input v-model="addNodeForm.semanticsId" type="number" autocomplete="off" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="addNodeClick">
-          添加
-        </el-button>
-      </span>
-      </template>
-    </el-dialog>
-    <!--删除分析点对话框-->
-    <el-dialog
-        v-model="centerDialogVisible"
-        title="删除分析点"
-        width="30%"
-        align-center
-    >
-      <span>删除分析点将删除该分析点子树，确认要删除吗？</span>
-      <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取消</el-button>
-        <el-button type="danger" @click="deleteNodeClick">
-          确认删除
-        </el-button>
-      </span>
-      </template>
-    </el-dialog>
-    <!--编辑分析点对话框-->
-    <el-dialog
-        v-model="centerDialogVisible2"
-        title="编辑分析点"
-        width="30%"
-        align-center
-    >
-      <el-form :model="editNodeForm">
-        <el-form-item label="分析点名" label-width="80px">
-          <el-input v-model="editNodeForm.name" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="语义id" label-width="80px">
-          <el-input v-model="editNodeForm.semanticsId" type="number" autocomplete="off" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="centerDialogVisible2 = false">取消</el-button>
-        <el-button type="primary" @click="centerDialogVisible2 = false">
-          确认编辑
-        </el-button>
-      </span>
-      </template>
-    </el-dialog>
     <!--分析点内容-->
     <div class="detail">
       <div class="search">
@@ -182,13 +121,77 @@
         </el-scrollbar>
       </div>
     </div>
+    <!--添加分析点对话框-->
+    <el-dialog v-model="dialogFormVisible" title="增加文档分析点" align-center>
+      <el-form :model="addNodeForm">
+        <el-form-item label="分析点名" label-width="80px">
+          <el-input v-model="addNodeForm.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="语义id" label-width="80px">
+          <el-input v-model="addNodeForm.semanticsId" type="number" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="addNodeClick">
+          添加
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
+    <!--删除分析点对话框-->
+    <el-dialog
+        v-model="centerDialogVisible"
+        title="删除分析点"
+        width="30%"
+        align-center
+    >
+      <span>删除分析点将删除该分析点子树，确认要删除吗？</span>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取消</el-button>
+        <el-button type="danger" @click="deleteNodeClick">
+          确认删除
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
+    <!--编辑分析点对话框-->
+    <el-dialog
+        v-model="centerDialogVisible2"
+        title="编辑分析点"
+        width="30%"
+        align-center
+    >
+      <el-form :model="editNodeForm">
+        <el-form-item label="分析点名" label-width="80px">
+          <el-input v-model="editNodeForm.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="语义id" label-width="80px">
+          <el-input v-model="editNodeForm.semanticsId" type="number" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="centerDialogVisible2 = false">取消</el-button>
+        <el-button type="primary" @click="centerDialogVisible2 = false">
+          确认编辑
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
+<script setup>
+import {Search} from "@element-plus/icons-vue";
+</script>
 <script>
 
 import {HttpClient} from "@/network/HttpClient";
 import {ElMessage} from "element-plus";
+import { Search } from '@element-plus/icons-vue'
 
 export default {
   name: "searchTree",
@@ -332,7 +335,6 @@ export default {
           { name:'新建分析点', command: 'add' },
           { name:'编辑分析点', command: 'edit' },
           { name:'删除分析点', command: 'delete'},
-          { name:'锁定分析点', command: 'lock' },
           { name:'添加关联表格', command: 'addTable' },
           { name:'添加关联图片', command: 'addImg' },
           { name:'添加关联文本', command: 'addText' },
