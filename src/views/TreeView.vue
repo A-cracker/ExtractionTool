@@ -7,7 +7,8 @@
           <input type="text" v-model="keyword" placeholder="请输入分析点" @keydown.enter="filter" />
           <span style="margin: 0 2px;display: inline-block"><el-button @click="filter" :icon="Search"></el-button></span>
         </div>
-        <vue3-tree-org
+        <div style="flex-grow: 1">
+          <vue3-tree-org
             ref="tree"
             :data="initTreeData"
             :horizontal="false"
@@ -45,6 +46,7 @@
             <div>{{node.children.length}}</div>
           </template>
         </vue3-tree-org>
+        </div>
       </div>
     </div>
     <!--分析点内容-->
@@ -470,6 +472,8 @@ export default {
   }
 }
 .tree-wrap {
+  display: flex;
+  flex-direction: column;
   position: relative;
   padding-top: 52px;
   .zm-tree-org{
