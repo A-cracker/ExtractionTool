@@ -8,7 +8,7 @@
     >
       <div style="display: flex;align-items: center;margin: 10px 20px;font-size: 20px;">文件分析工具</div>
       <el-menu-item index="/tree">分析点树</el-menu-item>
-      <el-menu-item index="/doc">文档解析</el-menu-item>
+      <el-menu-item index="/doc">文档预览</el-menu-item>
     </el-menu>
     <div class="content">
       <RouterView/>

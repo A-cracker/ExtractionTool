@@ -2,10 +2,17 @@
   <div class="tree-view box">
     <div class="tree left">
       <div class="tree-wrap" style="height: 100%;">
+
         <div class="search-box">
-          <span>搜索：</span>
           <input type="text" v-model="keyword" placeholder="请输入分析点" @keydown.enter="filter" />
-          <span style="margin: 0 2px;display: inline-block"><el-button @click="filter" :icon="Search"></el-button></span>
+          <div style="margin: 0 2px;display: inline-block"><el-button @click="filter" :icon="Search"></el-button></div>
+        </div>
+        <div style="padding: 5px 18px">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item>机构</el-breadcrumb-item>
+            <el-breadcrumb-item>帮区</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/doc' }"><span style="font-weight: bold">文档名</span></el-breadcrumb-item>
+          </el-breadcrumb>
         </div>
         <div style="flex-grow: 1">
           <vue3-tree-org
@@ -188,7 +195,7 @@
 </template>
 
 <script setup>
-import {Search} from "@element-plus/icons-vue";
+import {Search, ArrowRight} from "@element-plus/icons-vue";
 </script>
 <script>
 
@@ -315,7 +322,7 @@ export default {
             let moveLen = resize[i].left + (endX - startX); // （endx-startx）=移动的距离。resize[i].left+移动的距离=左边区域最后的宽度
             const maxT = box[i].clientWidth - resize[i].offsetWidth; // 容器宽度 - 左边区域的宽度 = 右边区域的宽度
 
-            moveLen = moveLen < 32 ? 32 : moveLen; // 左边区域的最小宽度为32px
+            moveLen = moveLen < 50 ? 50 : moveLen; // 左边区域的最小宽度为32px
             moveLen = moveLen > (maxT - 150) ? maxT - 150 : moveLen; //右边区域最小宽度为150px
 
             resize[i].style.left = moveLen; // 设置左侧区域的宽度
@@ -380,9 +387,9 @@ export default {
         ]
       } else {
         return [
-          { name:'新建分析点', command: 'add' },
-          { name:'编辑分析点', command: 'edit' },
-          { name:'删除分析点', command: 'delete'},
+          { name:'新建', command: 'add' },
+          { name:'删除', command: 'delete'},
+          { name:'新增同义词', command: 'edit' },
           { name:'添加关联表格', command: 'addTable' },
           { name:'添加关联图片', command: 'addImg' },
           { name:'添加关联文本', command: 'addText' },
@@ -545,9 +552,11 @@ export default {
     display: flex;
     flex-direction: column;
     .tree {
+      width: 100%;
       height: 50%;
     }
     .detail {
+      width: 100%;
       height: 50%;
     }
     .resize{
@@ -565,6 +574,9 @@ export default {
   }
 }
 .search-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   padding: 8px 15px;
   position: absolute;
   top: 0;
@@ -589,6 +601,10 @@ export default {
 }
 </style>
 <style>
+/*插件样式*/
+.zm-tree-contextmenu{
+  padding: 4px 0;
+}
 .selectedNode{
   background: #108ffe !important;
   color:#fff !important;
